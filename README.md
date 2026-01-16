@@ -1,11 +1,11 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/djodjonx/wiredi/main/logo/logo.png" alt="WireDI" width="600">
+  <img src="https://raw.githubusercontent.com/djodjonx/wireDI/main/logo/logo.png" alt="WireDI" width="600">
 </p>
 
 <p align="center">
   <a href="https://www.npmjs.com/package/@djodjonx/wiredi"><img src="https://img.shields.io/npm/v/@djodjonx/wiredi.svg?style=flat-square" alt="npm version"></a>
-  <a href="https://djodjonx.github.io/wiredi/"><img src="https://img.shields.io/badge/docs-GitHub%20Pages-blue?style=flat-square" alt="Documentation"></a>
-  <a href="https://github.com/djodjonx/wiredi/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/djodjonx/wiredi/ci.yml?style=flat-square" alt="CI"></a>
+  <a href="https://djodjonx.github.io/wireDI/"><img src="https://img.shields.io/badge/docs-GitHub%20Pages-blue?style=flat-square" alt="Documentation"></a>
+  <a href="https://github.com/djodjonx/wireDI/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/djodjonx/wireDI/ci.yml?style=flat-square" alt="CI"></a>
   <a href="https://www.typescriptlang.org/"><img src="https://img.shields.io/badge/TypeScript-5.0+-blue.svg?style=flat-square" alt="TypeScript"></a>
   <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square" alt="License: MIT"></a>
 </p>
@@ -27,7 +27,7 @@
 
 ## 📚 Documentation
 
-- **[Full API Documentation](https://djodjonx.github.io/wiredi/)** - Complete TypeDoc API reference
+- **[Full API Documentation](https://djodjonx.github.io/wireDI/)** - Complete TypeDoc API reference
 - **[Getting Started Guide](#quick-start)** - Start using WireDI in 5 minutes
 - **[Examples](./examples)** - Real-world integration examples
 
@@ -483,7 +483,7 @@ getEventDispatcherProvider().dispatch(new UserCreatedEvent(user))
 
 Full API documentation is available online and can be generated locally:
 
-**Online**: [View API Documentation](https://[your-username].github.io/WireDI/) *(configure GitHub Pages)*
+**Online**: [View API Documentation](https://djodjonx.github.io/wireDI/) *(GitHub Pages)*
 
 **Generate locally**:
 ```bash
