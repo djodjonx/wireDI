@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.7](https://github.com/djodjonx/diligent/compare/v0.0.6...v0.0.7) (2026-01-16)
+
+
+### Bug Fixes
+
+* **docs:** add GitHub Pages deployment after tsdoc-action ([d9a3152](https://github.com/djodjonx/diligent/commit/d9a3152d200c967d052ff3e978d133dea01959ef))
+* **docs:** add GitHub Pages deployment steps to docs workflow ([343a85a](https://github.com/djodjonx/diligent/commit/343a85a92f7202577f044af40ce73ba6333aed04))
+* **docs:** use correct tsdoc-action from erikyo ([dceea34](https://github.com/djodjonx/diligent/commit/dceea34b1910239c22b90fb68011a1a43219e629))
+
 ### [0.0.6](https://github.com/djodjonx/diligent/compare/v0.0.5...v0.0.6) (2026-01-16)
 
 
