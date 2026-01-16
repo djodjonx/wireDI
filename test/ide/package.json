@@ -1,0 +1,18 @@
+{
+  "name": "test-ide-di-validator",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Test project for diligent DI Validator",
+  "scripts": {
+    "validate": "cd ../.. && pnpm validate:di test/ide/Presentation/builder/myBuilder/index.ts test/ide/Presentation/builder/myBuilder/partials/*.ts"
+  },
+  "dependencies": {
+    "tsyringe": "^4.8.0",
+    "reflect-metadata": "^0.2.2"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3",
+    "@djodjonx/diligent": "file:../../"
+  }
+}
+
