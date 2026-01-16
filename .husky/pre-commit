@@ -1,1 +1,9 @@
-pnpm test
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# Run linting
+pnpm lint || exit 1
+
+# Run type checking
+pnpm type-check || exit 1
+

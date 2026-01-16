@@ -1,6 +1,6 @@
 {
   "name": "@djodjonx/diligent",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Diligent dependency injection - Type-safe DI container configuration with compile-time validation",
   "type": "module",
   "main": "dist/index.js",
