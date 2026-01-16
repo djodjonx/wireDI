@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.6](https://github.com/djodjonx/diligent/compare/v0.0.5...v0.0.6) (2026-01-16)
+
+
+### Bug Fixes
+
+* **ci:** remove Node 18 support, require Node 20.12+ ([5f20961](https://github.com/djodjonx/diligent/commit/5f20961920a3d7e73bf17001b5a32ed83a764f8d))
+
 ### [0.0.5](https://github.com/djodjonx/diligent/compare/v0.0.4...v0.0.5) (2026-01-16)
 
 
