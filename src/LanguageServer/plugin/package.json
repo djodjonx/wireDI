@@ -1,0 +1,6 @@
+{
+  "name": "diligent-plugin",
+  "type": "commonjs",
+  "main": "index.js"
+}
+
