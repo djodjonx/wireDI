@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.5](https://github.com/djodjonx/diligent/compare/v0.0.4...v0.0.5) (2026-01-16)
+
+
+### Features
+
+* **ci:** replace custom docs workflow with tsdoc-action ([294c7e2](https://github.com/djodjonx/diligent/commit/294c7e2cc5bf7d3916b95159ca5fcb4234a7749b))
+
+
+### Bug Fixes
+
+* **ci:** prevent browser opening in CI environment ([c0c6908](https://github.com/djodjonx/diligent/commit/c0c6908a3a28245a681892398e44a78d3c1ee591))
+
 ### [0.0.4](https://github.com/djodjonx/diligent/compare/v0.0.2...v0.0.4) (2026-01-16)
 
 
