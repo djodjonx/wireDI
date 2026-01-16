@@ -40,6 +40,9 @@ jobs:
             ${{ runner.os }}-pnpm-store-
 
       - name: Install dependencies
+        env:
+          CI: true
+          BROWSER: none
         run: pnpm install --frozen-lockfile
 
       - name: Lint
@@ -79,6 +82,9 @@ jobs:
             ${{ runner.os }}-pnpm-store-
 
       - name: Install dependencies
+        env:
+          CI: true
+          BROWSER: none
         run: pnpm install --frozen-lockfile
 
       - name: Build
@@ -116,6 +122,9 @@ jobs:
           version: 10
 
       - name: Install dependencies
+        env:
+          CI: true
+          BROWSER: none
         run: pnpm install --frozen-lockfile
 
       - name: Build

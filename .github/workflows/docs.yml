@@ -51,12 +51,18 @@ jobs:
             ${{ runner.os }}-pnpm-store-
 
       - name: Install dependencies
+        env:
+          CI: true
+          BROWSER: none
         run: pnpm install --frozen-lockfile
 
       - name: Build library
         run: pnpm build:lib
 
       - name: Generate documentation
+        env:
+          CI: true
+          BROWSER: none
         run: pnpm docs
 
       - name: Add .nojekyll file
