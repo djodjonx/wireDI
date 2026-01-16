@@ -4,7 +4,9 @@ import useBuilder, {
     definePartialConfig,
     useContainerProvider,
     resetContainerProvider,
-    ProviderLifecycle
+    ProviderLifecycle,
+    useEventDispatcherProvider,
+    resetEventDispatcherProvider
 } from '../src/index'
 import type { ContainerProvider } from '../src/Provider/types'
 
@@ -13,6 +15,7 @@ describe('useBuilder', () => {
 
   beforeEach(() => {
     resetContainerProvider()
+    resetEventDispatcherProvider()
     mockProvider = {
       name: 'mock-provider',
       registerValue: vi.fn(),
@@ -76,6 +79,56 @@ describe('useBuilder', () => {
       expect(mockProvider.registerValue).toHaveBeenCalledWith(TOKEN, 'some-value')
     })
 
+    it('should skip registration if token is already registered', () => {
+        vi.mocked(mockProvider.isRegistered).mockImplementation((token) => {
+            if (token === TestService) return true
+            return false
+        })
+        const config = defineBuilderConfig({
+            builderId: 'skip-token',
+            injections: [{ token: TestService }],
+            listeners: []
+        })
+        useBuilder(config)
+        expect(mockProvider.registerClass).not.toHaveBeenCalled()
+    })
+
+    it('should skip registration if symbol token is already registered', () => {
+        const SYM = Symbol('SYM')
+        vi.mocked(mockProvider.isRegistered).mockImplementation((token) => {
+            if (token === SYM) return true
+            return false
+        })
+        const config = defineBuilderConfig({
+            builderId: 'skip-sym',
+            injections: [{ token: SYM, value: () => 'val' }],
+            listeners: []
+        })
+        useBuilder(config)
+        expect(mockProvider.registerValue).not.toHaveBeenCalledWith(SYM, expect.anything())
+        expect(mockProvider.registerValue).toHaveBeenCalledWith(expect.any(Symbol), 'skip-sym')
+    })
+
+    it('should register symbol with provider class', () => {
+        class ProviderClass {}
+        const config = defineBuilderConfig({
+            builderId: 'symbol-provider',
+            injections: [{ token: TOKEN, provider: ProviderClass }],
+            listeners: []
+        })
+        useBuilder(config)
+        expect(mockProvider.registerClass).toHaveBeenCalledWith(TOKEN, ProviderClass, ProviderLifecycle.Singleton)
+    })
+
+    it('should throw if symbol registered without provider (runtime check)', () => {
+        const config = {
+            builderId: 'error',
+            injections: [{ token: TOKEN } as any],
+            listeners: []
+        }
+        expect(() => useBuilder(config as any)).toThrow(/Provider required/)
+    })
+
     it('should only register once for the same builderId', () => {
         const config = defineBuilderConfig({
           builderId: 'once',
@@ -129,6 +182,38 @@ describe('useBuilder', () => {
 
         useBuilder(config, { key: 'expected' })
         expect(mockProvider.registerValue).toHaveBeenCalledWith(VAL_TOKEN, 'expected')
+    })
+
+    describe('events', () => {
+        it('should skip event registration if no event dispatcher is configured', () => {
+            const config = defineBuilderConfig({
+                builderId: 'no-dispatcher',
+                injections: [],
+                listeners: [{ event: class E {}, listener: class L {} }]
+            })
+            
+            expect(() => useBuilder(config)).not.toThrow()
+        })
+
+        it('should register events if dispatcher is configured', () => {
+            const mockDispatcher = {
+                register: vi.fn(),
+                name: 'mock'
+            }
+            useEventDispatcherProvider(mockDispatcher as any)
+
+            class MyEvent {}
+            class MyListener {}
+
+            const config = defineBuilderConfig({
+                builderId: 'with-dispatcher',
+                injections: [],
+                listeners: [{ event: MyEvent, listener: MyListener }]
+            })
+
+            useBuilder(config)
+            expect(mockDispatcher.register).toHaveBeenCalledWith(MyEvent, MyListener)
+        })
     })
   })
 })
