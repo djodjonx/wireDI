@@ -30,3 +30,7 @@ coverage/
 .cache/
 temp/
 tmp/
+
+# Documentation (generated or local only)
+docs/Agent/
+docs/api/
