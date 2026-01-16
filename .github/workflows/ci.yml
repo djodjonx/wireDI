@@ -87,9 +87,12 @@ jobs:
       - name: Check build artifacts
         run: |
           ls -la dist/
-          test -f dist/index.js
+          test -f dist/index.cjs
           test -f dist/index.mjs
-          test -f dist/index.d.ts
+          test -f dist/index.d.cts
+          test -f dist/index.d.mts
+          test -d dist/plugin
+          echo "✅ All build artifacts present"
 
   build-matrix:
     name: Build on ${{ matrix.os }} with Node ${{ matrix.node }}
