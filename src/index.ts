@@ -394,20 +394,25 @@ type HasTokenDuplicateCheck<Token, Rest> = Rest extends readonly [infer First, .
 /**
  * Validates that local listeners do not duplicate listeners already defined in partials.
  * Duplicate = Same Event class AND Same Listener class.
+ *
+ * Applies both:
+ * 1. Internal duplicate detection (within same array)
+ * 2. Partial collision detection (against inherited listeners)
  */
 type ValidateListeners<LocalListeners, InheritedListenerUnion> =
     [InheritedListenerUnion] extends [never]
         // No inherited listeners, validate only internal duplicates
         ? ValidateListenersInternal<LocalListeners>
-        : ValidateListenersAgainstPartials<LocalListeners, InheritedListenerUnion>
+        // Has inherited listeners, validate both internal and against partials
+        : ValidateListenersInternal<ValidateListenersAgainstPartialsFixed<LocalListeners, InheritedListenerUnion>>
 
 /**
  * Check each local listener against inherited listeners from partials.
- * Uses strict type equality to avoid false positives.
+ * Only flags entries where BOTH event AND listener match exactly.
  */
-type ValidateListenersAgainstPartials<LocalListeners, InheritedListenerUnion> = {
+type ValidateListenersAgainstPartialsFixed<LocalListeners, InheritedListenerUnion> = {
     [K in keyof LocalListeners]: LocalListeners[K] extends { event: infer E, listener: infer L }
-        ? IsListenerInUnion<E, L, InheritedListenerUnion> extends true
+        ? true extends CheckListenerInUnionDistributive<E, L, InheritedListenerUnion>
             ? {
                 error: '[WireDI] This event listener is already registered in a partial'
                 event: E
@@ -419,16 +424,19 @@ type ValidateListenersAgainstPartials<LocalListeners, InheritedListenerUnion> = 
 }
 
 /**
- * Check if a specific (event, listener) pair exists in a union of listener entries.
- * Uses strict type equality for both event AND listener.
+ * Check if a (event, listener) pair exists in a union.
+ * Distributes over the union to check each member.
+ * Uses StrictEquals for exact type comparison.
  */
-type IsListenerInUnion<E, L, Union> = Union extends { event: infer UE, listener: infer UL }
-    ? StrictEquals<E, UE> extends true
-        ? StrictEquals<L, UL> extends true
-            ? true
-            : IsListenerInUnion<E, L, Exclude<Union, { event: UE, listener: UL }>>
-        : IsListenerInUnion<E, L, Exclude<Union, { event: UE, listener: UL }>>
-    : false
+type CheckListenerInUnionDistributive<E, L, Union> =
+    Union extends { event: infer UE, listener: infer UL }
+        ? StrictEquals<E, UE> extends true
+            ? StrictEquals<L, UL> extends true
+                ? true
+                : false
+            : false
+        : false
+
 
 /**
  * Strict type equality check.
