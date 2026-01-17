@@ -54,8 +54,8 @@ class ConsoleLogger implements LoggerInterface {
     }
 }
 
-class FileLogger implements LoggerInterface {
-    readonly __brand = 'FileLogger' as const
+class __FileLogger implements LoggerInterface {
+    readonly __brand = '_FileLogger' as const
     log(message: string): void {
         console.log(`[FILE] ${message}`)
     }
@@ -85,8 +85,8 @@ class ProductRepository implements ProductRepositoryInterface {
 }
 
 // Incorrect implementation for type mismatch tests
-class WrongLogger {
-    readonly __brand = 'WrongLogger' as const
+class __WrongLogger {
+    readonly __brand = '_WrongLogger' as const
     // Missing log() and debug() methods - doesn't implement LoggerInterface
     write(message: string): void {
         console.log(message)
@@ -312,7 +312,7 @@ const errorDuplicateToken = defineBuilderConfig({
     builderId: 'error.duplicate.token',
     injections: [
         { token: TOKENS.Logger, provider: ConsoleLogger },
-        { token: TOKENS.Logger, provider: FileLogger }, // ❌ Duplicate!
+        { token: TOKENS.Logger, provider: _FileLogger }, // ❌ Duplicate!
         // Expected error: 'provider' does not exist in type { error: "..."; token: ...; hint: "..." }
     ],
 })
@@ -336,7 +336,7 @@ const errorTokenInPartial = defineBuilderConfig({
         }),
     ],
     injections: [
-        { token: TOKENS.Logger, provider: FileLogger }, // ❌ Already in partial!
+        { token: TOKENS.Logger, provider: _FileLogger }, // ❌ Already in partial!
         // Expected error: 'provider' does not exist in type { error: "..."; token: ...; hint: "..." }
     ],
 })
@@ -372,7 +372,7 @@ const errorListenerInPartial = defineBuilderConfig({
 const errorTypeMismatch = defineBuilderConfig({
     builderId: 'error.type.mismatch',
     injections: [
-        { token: TOKENS.Logger, provider: WrongLogger }, // ❌ WrongLogger doesn't implement LoggerInterface
+        { token: TOKENS.Logger, provider: _WrongLogger }, // ❌ _WrongLogger doesn't implement LoggerInterface
         // Expected LSP error: Type incompatible
     ],
 })
@@ -406,7 +406,7 @@ const errorMultipleDuplicates = defineBuilderConfig({
     builderId: 'error.multiple',
     injections: [
         { token: TOKENS.Logger, provider: ConsoleLogger },
-        { token: TOKENS.Logger, factory: () => new FileLogger() }, // ❌ Duplicate
+        { token: TOKENS.Logger, factory: () => new _FileLogger() }, // ❌ Duplicate
         { token: UserService },
         { token: UserService }, // ❌ Duplicate
     ],
@@ -422,7 +422,7 @@ const errorCrossPartialDuplication = defineBuilderConfig({
         }),
     ],
     injections: [
-        { token: TOKENS.Logger, provider: FileLogger }, // ❌ Already in partial
+        { token: TOKENS.Logger, provider: _FileLogger }, // ❌ Already in partial
     ],
     listeners: [
         { event: UserCreatedEvent, listener: EmailNotificationListener }, // ❌ Already in partial
