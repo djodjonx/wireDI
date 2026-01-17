@@ -1,6 +1,6 @@
 {
   "name": "@djodjonx/wiredi",
-  "version": "0.0.11",
+  "version": "0.0.12",
   "description": "WireDI - Wire your dependency injection with type safety and compile-time validation",
   "homepage": "https://github.com/djodjonx/diligent#readme",
   "repository": {
