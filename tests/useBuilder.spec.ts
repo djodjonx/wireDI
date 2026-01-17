@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest'
-import useBuilder, { 
+import { 
+    useBuilder,
     defineBuilderConfig, 
     definePartialConfig,
     useContainerProvider,
