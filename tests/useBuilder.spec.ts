@@ -198,6 +198,8 @@ describe('useBuilder', () => {
         it('should register events if dispatcher is configured', () => {
             const mockDispatcher = {
                 register: vi.fn(),
+                hasListener: vi.fn().mockReturnValue(false),
+                clearAllListeners: vi.fn(),
                 name: 'mock'
             }
             useEventDispatcherProvider(mockDispatcher as any)
@@ -213,6 +215,28 @@ describe('useBuilder', () => {
 
             useBuilder(config)
             expect(mockDispatcher.register).toHaveBeenCalledWith(MyEvent, MyListener)
+        })
+
+        it('should not register event if listener is already registered', () => {
+            const mockDispatcher = {
+                register: vi.fn(),
+                hasListener: vi.fn().mockReturnValue(true),
+                clearAllListeners: vi.fn(),
+                name: 'mock'
+            }
+            useEventDispatcherProvider(mockDispatcher as any)
+
+            class MyEvent {}
+            class MyListener {}
+
+            const config = defineBuilderConfig({
+                builderId: 'with-duplicate-listener',
+                injections: [],
+                listeners: [{ event: MyEvent, listener: MyListener }]
+            })
+
+            useBuilder(config)
+            expect(mockDispatcher.register).not.toHaveBeenCalled()
         })
     })
   })

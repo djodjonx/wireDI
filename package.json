@@ -2,6 +2,14 @@
   "name": "@djodjonx/wiredi",
   "version": "0.0.11",
   "description": "WireDI - Wire your dependency injection with type safety and compile-time validation",
+  "homepage": "https://github.com/djodjonx/diligent#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/djodjonx/diligent.git"
+  },
+  "bugs": {
+    "url": "https://github.com/djodjonx/diligent/issues"
+  },
   "type": "module",
   "main": "dist/index.cjs",
   "module": "dist/index.mjs",
