@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.13](https://github.com/djodjonx/diligent/compare/v0.0.12...v0.0.13) (2026-01-17)
+
+
+### Features
+
+* add internal token duplication detection and improve type safety ([365e6d8](https://github.com/djodjonx/diligent/commit/365e6d88d4471551b08ede815294523ba549918e))
+* make library fully tree-shakable ([0c985a7](https://github.com/djodjonx/diligent/commit/0c985a73f293f7c7b505642251fff0de6a17b5ef))
+
+
+### Bug Fixes
+
+* correct listener validation against partials ([69d0d40](https://github.com/djodjonx/diligent/commit/69d0d40ce424108ffc9c1b58e65135435b527845))
+* listener validation against partials now works correctly ([79850f2](https://github.com/djodjonx/diligent/commit/79850f26ffa651dacaad65fa260b48e0262ccae8))
+* prefix unused test classes with underscore to fix lint warnings ([abb1a37](https://github.com/djodjonx/diligent/commit/abb1a3760ded6514ff01f12315822ebafee64f4a))
+* skip duplicate detection for plain symbols ([4d46502](https://github.com/djodjonx/diligent/commit/4d465026762e58a7ad1155a5ca16f0f7a3d16f3b))
+* **tests:** remove unused variables in error tests ([a5dbbbd](https://github.com/djodjonx/diligent/commit/a5dbbbd81521ab0c230c1448081393d8d909b980))
+
 ### [0.0.12](https://github.com/djodjonx/diligent/compare/v0.0.11...v0.0.12) (2026-01-17)
 
 
