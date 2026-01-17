@@ -3,7 +3,7 @@ import { TOKENS, UserRepository } from '../fixtures'
 
 
 // ❌ ERROR: Factory returns wrong type
-const errorFactoryWrongType = defineBuilderConfig({
+defineBuilderConfig({
     builderId: 'error.factory.wrong',
     injections: [
         {

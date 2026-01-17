@@ -3,7 +3,7 @@ import { TOKENS } from '../fixtures'
 
 
 // ❌ ERROR: Value returns wrong type
-const errorValueWrongType = defineBuilderConfig({
+defineBuilderConfig({
     builderId: 'error.value.wrong',
     injections: [
         {

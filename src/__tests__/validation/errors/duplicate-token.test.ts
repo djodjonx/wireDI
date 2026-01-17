@@ -3,7 +3,7 @@ import { TOKENS, ConsoleLogger, __FileLogger } from '../fixtures'
 
 
 // ❌ ERROR: Duplicate token in same array
-const errorDuplicateToken = defineBuilderConfig({
+defineBuilderConfig({
     builderId: 'error.duplicate.token',
     injections: [
         { token: TOKENS.Logger, provider: ConsoleLogger },
@@ -13,7 +13,7 @@ const errorDuplicateToken = defineBuilderConfig({
 })
 
 // ❌ ERROR: Duplicate token in same array (from injection-validation)
-const configDuplicateToken = defineBuilderConfig({
+defineBuilderConfig({
     builderId: 'test.error.duplicate',
     injections: [
         { token: TOKENS.Logger, provider: ConsoleLogger },

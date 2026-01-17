@@ -3,7 +3,7 @@ import { TOKENS, ConsoleLogger, __FileLogger, UserService } from '../fixtures'
 
 
 // ❌ ERROR: Multiple duplicates (complex case)
-const errorMultipleDuplicates = defineBuilderConfig({
+defineBuilderConfig({
     builderId: 'error.multiple',
     injections: [
         { token: TOKENS.Logger, provider: ConsoleLogger },
@@ -14,7 +14,7 @@ const errorMultipleDuplicates = defineBuilderConfig({
 })
 
 // ❌ ERROR: Mixed duplicates (provider + factory)
-const configMixedDuplicate = defineBuilderConfig({
+defineBuilderConfig({
     builderId: 'test.error.mixed',
     injections: [
         { token: TOKENS.Logger, provider: ConsoleLogger },

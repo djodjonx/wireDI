@@ -3,7 +3,7 @@ import { UserService, ProductService } from '../fixtures'
 
 
 // ❌ ERROR: Duplicate class token
-const errorDuplicateClassToken = defineBuilderConfig({
+defineBuilderConfig({
     builderId: 'error.duplicate.class',
     injections: [
         { token: UserService },
@@ -13,7 +13,7 @@ const errorDuplicateClassToken = defineBuilderConfig({
 })
 
 // ❌ ERROR: Duplicate class token (from injection-validation)
-const configDuplicateClass = defineBuilderConfig({
+defineBuilderConfig({
     builderId: 'test.error.class',
     injections: [
         { token: ProductService },

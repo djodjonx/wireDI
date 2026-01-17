@@ -4,7 +4,7 @@ import { partialBasic } from '../partials/basic-partial.test'
 
 
 // ❌ ERROR: Token already in partial
-const errorTokenInPartial = defineBuilderConfig({
+defineBuilderConfig({
     builderId: 'error.token.partial',
     extends: [
         definePartialConfig({
@@ -18,7 +18,7 @@ const errorTokenInPartial = defineBuilderConfig({
 })
 
 // ❌ ERROR: Token already in partial (from injection-validation)
-const configDuplicateFromPartial = defineBuilderConfig({
+defineBuilderConfig({
     builderId: 'test.error.partial',
     extends: [partialBasic],
     injections: [

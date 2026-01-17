@@ -3,7 +3,7 @@ import { TOKENS, ConsoleLogger, __FileLogger, UserCreatedEvent, EmailNotificatio
 
 
 // ❌ ERROR: Cross-partial duplication
-const errorCrossPartialDuplication = defineBuilderConfig({
+ defineBuilderConfig({
     builderId: 'error.cross.partial',
     extends: [
         definePartialConfig({

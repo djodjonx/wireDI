@@ -3,7 +3,7 @@ import { UserCreatedEvent, EmailNotificationListener, EmailListener } from '../f
 
 
 // ❌ ERROR: Duplicate listener (same event + same listener)
-const errorDuplicateListener = defineBuilderConfig({
+defineBuilderConfig({
     builderId: 'error.duplicate.listener',
     injections: [],
     listeners: [
@@ -14,7 +14,7 @@ const errorDuplicateListener = defineBuilderConfig({
 })
 
 // ❌ This SHOULD produce a TypeScript error - exact duplicate
-const _configDuplicate = defineBuilderConfig({
+defineBuilderConfig({
     builderId: 'test.duplicate',
     injections: [],
     listeners: [

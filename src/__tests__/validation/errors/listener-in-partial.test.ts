@@ -9,7 +9,7 @@ const partialWithListener = definePartialConfig({
 
 
 // ❌ ERROR: Listener already in partial
-const errorListenerInPartial = defineBuilderConfig({
+defineBuilderConfig({
     builderId: 'error.listener.partial',
     extends: [
         definePartialConfig({
@@ -24,7 +24,7 @@ const errorListenerInPartial = defineBuilderConfig({
 })
 
 // ❌ This SHOULD produce a TypeScript error - already in partial
-const _configWithPartialDuplicate = defineBuilderConfig({
+defineBuilderConfig({
     builderId: 'test.partial.duplicate',
     extends: [partialWithListener],
     injections: [],
