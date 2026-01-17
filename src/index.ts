@@ -91,7 +91,7 @@ export type EventConfig = readonly EventEntry[]
 export interface BuilderConfig<C = null> {
     builderId: string
     injections: InjectionConfig<C>
-    listeners: EventConfig
+    listeners?: EventConfig
 }
 
 /**
@@ -202,9 +202,9 @@ function registerConfig<C = null>(
 
 function registerEvent(
     _provider: ContainerProvider,
-    listeners: EventConfig,
+    listeners?: EventConfig,
 ): void {
-    if (!listeners.length) return
+    if (!listeners || !listeners.length) return
 
     // Check if event dispatcher provider is configured
     if (!hasEventDispatcherProvider()) {
@@ -216,7 +216,9 @@ function registerEvent(
     const eventDispatcher = getEventDispatcherProvider()
 
     listeners.forEach((configEntry) => {
-        eventDispatcher.register(configEntry.event, configEntry.listener)
+        if (!eventDispatcher.hasListener(configEntry.event, configEntry.listener)) {
+            eventDispatcher.register(configEntry.event, configEntry.listener)
+        }
     })
 }
 
@@ -300,20 +302,82 @@ type ValidateInjections<LocalInjections, InheritedTokenUnion> =
  */
 type ValidateListeners<LocalListeners, InheritedListenerUnion> =
     [InheritedListenerUnion] extends [never]
-        // No inherited listeners, all local listeners are valid
-        ? LocalListeners
-        : {
-            [K in keyof LocalListeners]: LocalListeners[K] extends { event: infer E, listener: infer L }
-                ? { event: E, listener: L } extends InheritedListenerUnion
-                    ? {
-                        error: '[WireDI] This event listener is already registered in a partial'
+        // No inherited listeners, validate only internal duplicates
+        ? ValidateListenersInternal<LocalListeners>
+        : ValidateListenersAgainstPartials<LocalListeners, InheritedListenerUnion>
+
+/**
+ * Check each local listener against inherited listeners from partials.
+ * Uses strict type equality to avoid false positives.
+ */
+type ValidateListenersAgainstPartials<LocalListeners, InheritedListenerUnion> = {
+    [K in keyof LocalListeners]: LocalListeners[K] extends { event: infer E, listener: infer L }
+        ? IsListenerInUnion<E, L, InheritedListenerUnion> extends true
+            ? {
+                error: '[WireDI] This event listener is already registered in a partial'
+                event: E
+                listener: L
+                hint: 'Each (event, listener) pair can only be registered once.'
+            }
+            : LocalListeners[K]
+        : LocalListeners[K]
+}
+
+/**
+ * Check if a specific (event, listener) pair exists in a union of listener entries.
+ * Uses strict type equality for both event AND listener.
+ */
+type IsListenerInUnion<E, L, Union> = Union extends { event: infer UE, listener: infer UL }
+    ? StrictEquals<E, UE> extends true
+        ? StrictEquals<L, UL> extends true
+            ? true
+            : IsListenerInUnion<E, L, Exclude<Union, { event: UE, listener: UL }>>
+        : IsListenerInUnion<E, L, Exclude<Union, { event: UE, listener: UL }>>
+    : false
+
+/**
+ * Strict type equality check.
+ * Returns true only if A and B are exactly the same type.
+ */
+type StrictEquals<A, B> =
+    (<T>() => T extends A ? 1 : 2) extends (<T>() => T extends B ? 1 : 2) ? true : false
+
+/**
+ * Validates that there are no duplicate listeners within the same array.
+ * Checks each listener against all following listeners.
+ * A duplicate is defined as having BOTH the same event AND the same listener.
+ */
+type ValidateListenersInternal<T> = T extends readonly []
+    ? T
+    : T extends readonly [infer First, ...infer Rest]
+        ? First extends { event: infer E, listener: infer L }
+            ? HasExactDuplicate<E, L, Rest> extends true
+                ? [
+                    {
+                        error: '[WireDI] Duplicate listener in the same configuration'
                         event: E
                         listener: L
-                        hint: 'Each (event, listener) pair can only be registered once.'
-                    }
-                    : LocalListeners[K]
-                : LocalListeners[K]
-        }
+                        hint: 'Each (event, listener) pair must be unique within the configuration.'
+                    },
+                    ...ValidateListenersInternal<Rest>
+                ]
+                : [First, ...ValidateListenersInternal<Rest>]
+            : [First, ...ValidateListenersInternal<Rest>]
+        : T
+
+/**
+ * Helper to check if an exact (event, listener) pair exists in the rest of the array.
+ * Uses strict type equality to avoid false positives with structurally similar types.
+ */
+type HasExactDuplicate<E, L, Rest> = Rest extends readonly [infer First, ...infer Tail]
+    ? First extends { event: infer FE, listener: infer FL }
+        ? StrictEquals<E, FE> extends true
+            ? StrictEquals<L, FL> extends true
+                ? true
+                : HasExactDuplicate<E, L, Tail>
+            : HasExactDuplicate<E, L, Tail>
+        : HasExactDuplicate<E, L, Tail>
+    : false
 
 /**
  * A helper function to define a builder configuration with strict type inference and inheritance.
@@ -394,13 +458,13 @@ export function defineBuilderConfig<
     C = null,
     const Partials extends readonly TypedPartialConfig<C, any>[] = [],
     const LocalInjections extends InjectionConfig<C> = InjectionConfig<C>,
-    const LocalListeners extends EventConfig = EventConfig,
+    const LocalListeners extends EventConfig | undefined = EventConfig | undefined,
 >(
     config: {
         builderId: string
         extends?: Partials
         injections: ValidateInjections<LocalInjections, ExtractTokensFromTypedPartials<Partials>[number]>
-        listeners: ValidateListeners<LocalListeners, ExtractListenersFromPartials<Partials>>
+        listeners?: ValidateListeners<LocalListeners, ExtractListenersFromPartials<Partials>>
     },
 ): TypedBuilderConfig<C, [...ExtractTokensFromTypedPartials<Partials>, ...ExtractTokens<LocalInjections>]> {
     // Runtime Logic:
@@ -414,7 +478,7 @@ export function defineBuilderConfig<
 
     const mergedListeners = [
         ...(config.extends || []).flatMap(p => p.listeners || []),
-        ...config.listeners,
+        ...(config.listeners as EventConfig || []),
     ]
 
     return {
