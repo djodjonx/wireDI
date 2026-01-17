@@ -13,13 +13,13 @@ import type { ContainerProvider } from '../../Provider'
  * Token representing an event type (class constructor)
  * Events are identified by their class constructor
  */
-export type EventToken = new (...args: any[]) => any
+export type EventToken = new (...args: unknown[]) => unknown
 
 /**
  * Token representing a listener (class constructor or symbol)
  * Listeners can be registered as classes or symbol tokens
  */
-export type ListenerToken = (new (...args: any[]) => any) | symbol
+export type ListenerToken = (new (...args: unknown[]) => unknown) | symbol
 
 /**
  * Configuration entry for registering a listener to an event

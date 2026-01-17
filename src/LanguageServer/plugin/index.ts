@@ -68,7 +68,8 @@ function init(modules: { typescript: typeof ts }): ts.server.PluginModule {
         for (const key of Object.keys(originalLS) as (keyof ts.LanguageService)[]) {
             const method = originalLS[key]
             if (typeof method === 'function') {
-                ;(proxy as any)[key] = (...args: any[]) => (method as Function).apply(originalLS, args)
+                ;(proxy as unknown as Record<string, unknown>)[key] = (...args: unknown[]) =>
+                    (method as Function).apply(originalLS, args)
             }
         }
 

@@ -49,7 +49,7 @@ export type {
     EventListenerEntry,
 } from './EventDispatcher/Provider/index'
 
-type Constructor<T = any> = new (...args: any[]) => T
+type Constructor<T = unknown> = new (...args: unknown[]) => T
 
 interface BuilderConfigEntryValue<C = null> {
     token: symbol

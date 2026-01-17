@@ -2,7 +2,7 @@
  * Generic constructor type
  * @template T - The type of the class instance
  */
-export type Constructor<T = any> = new (...args: any[]) => T
+export type Constructor<T = unknown> = new (...args: unknown[]) => T
 
 /**
  * Dependency lifecycle options

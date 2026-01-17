@@ -52,7 +52,7 @@ import { ProviderLifecycle as Lifecycle } from '../index'
  * @template T - The type of the class instance
  * @internal
  */
-type Constructor<T = any> = new (...args: any[]) => T
+type Constructor<T = unknown> = new (...args: unknown[]) => T
 
 /**
  * Configuration options for AwilixProvider

@@ -94,12 +94,16 @@ export class MutableEventDispatcherProvider implements EventDispatcherProvider {
 
         for (const listenerToken of listenerTokens) {
             try {
-                const listener = this.containerProvider.resolve<{ onEvent(event: object): void }>(listenerToken)
+                // ListenerToken can be a symbol or a constructor, both are valid ProviderToken types
+                const listener = this.containerProvider.resolve<{ onEvent(event: object): void }>(
+                    listenerToken as symbol | { new (...args: unknown[]): { onEvent(event: object): void } }
+                )
                 listener.onEvent(event)
-            } catch (error: any) {
+            } catch (error: unknown) {
+                const errorMessage = error instanceof Error ? error.stack || error.message : String(error)
                 console.error(
                     `[MutableEventDispatcherProvider] Error dispatching event "${eventName}":`,
-                    error.stack || error.message
+                    errorMessage
                 )
                 throw error
             }

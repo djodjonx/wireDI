@@ -44,7 +44,7 @@ export interface TsyringeDependencyContainer {
      * Registers a dependency in the container
      */
     register<T>(
-        token: any,
+        token: symbol | Constructor<T>,
         provider: { useValue?: T; useFactory?: () => T; useClass?: Constructor<T> },
         options?: { lifecycle?: unknown },
     ): void
@@ -52,12 +52,12 @@ export interface TsyringeDependencyContainer {
     /**
      * Checks if a token is registered
      */
-    isRegistered(token: any): boolean
+    isRegistered(token: symbol | Constructor): boolean
 
     /**
      * Resolves a dependency from the container
      */
-    resolve<T>(token: any): T
+    resolve<T>(token: symbol | Constructor<T>): T
 
     /**
      * Creates a child container for scoped registrations
